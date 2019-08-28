@@ -8,4 +8,8 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
-config.js
+.env
+environment.js
+screens/*.json
+.eslintrc.json
+MealPlanner.code-workspace
