@@ -1,7 +1,8 @@
 # MealPlanner
 To take the stress off of deciding what to eat ahead of time, MealPlanner can help you find quality recipes, save your favorite recipes and create a meal plan and grocery list to make dinnertime as smooth as possible.
 # Screenshots
-![](https://i.imgur.com/dOPI6OR.png=375x667)![](https://i.imgur.com/Y7pmGFD.png=375x667)
+<img src="https://i.imgur.com/dOPI6OR.png" width="375" height="667"/>
+<img src="https://i.imgur.com/Y7pmGFD.png" width="375" height="667"/>
 # Current Features
 * User Authentication with Firebase
   * Login with email/password
