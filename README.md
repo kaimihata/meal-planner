@@ -9,6 +9,7 @@ To take the stress off of deciding what to eat ahead of time, MealPlanner can he
 * Saving recipes
 * Cloud storage with Firebase
   * Can add and remove favorite recipes, accessible from any signed-in device
+* Follows the [Airbnb React / JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react)
 # Planned Features
 * Generation of a meal plan
 * Offline storage of favorite recipes
