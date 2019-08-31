@@ -13,8 +13,11 @@ To take the stress off of deciding what to eat ahead of time, MealPlanner can he
 * Generation of a meal plan
 * Offline storage of favorite recipes
 * Rating recipes
+* Generating Shopping List
+* Commenting on recipes
 # Libraries
 * expo
 * firebase
 * react-navigation
 * react-native-elements
+* react-native-calendars
