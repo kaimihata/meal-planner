@@ -1,12 +1,28 @@
+/* eslint-disable react/jsx-filename-extension */
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Provider } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
+import { store, persistor } from './src/store';
 // import * as Ionicons from '@expo/vector-icons/Ionicons';
 
-import AppNavigator from './navigation/AppNavigator';
+import AppNavigator from './src/navigation/AppNavigator';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -19,14 +35,17 @@ export default function App(props) {
         onFinish={() => handleFinishLoading(setLoadingComplete)}
       />
     );
-  } else {
-    return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
-      </View>
-    );
   }
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <View style={styles.container}>
+          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <AppNavigator />
+        </View>
+      </PersistGate>
+    </Provider>
+  );
 }
 
 async function loadResourcesAsync() {
@@ -56,10 +75,3 @@ function handleLoadingError(error: Error) {
 function handleFinishLoading(setLoadingComplete) {
   setLoadingComplete(true);
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});

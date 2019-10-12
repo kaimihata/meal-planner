@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
 import {
@@ -9,11 +10,16 @@ import {
   ImageBackground,
   ActivityIndicator,
 } from 'react-native';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   Icon,
 } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
+import {
+  addRecipeToStorage,
+  changeFavoritedRecipe,
+} from '../actions';
 import DisplayIngredients from '../functions/DisplayIngredients';
 import DisplayInstructions from '../functions/DisplayInstructions';
 import firebase, { firestore } from '../firebase';
@@ -109,9 +115,7 @@ class RecipeDetailScreen extends Component {
       } else {
         this.loadRecipe();
       }
-    }).catch((error) => {
-      console.log('Error getting document', error);
-    });
+    }).catch((error) => error);
   }
 
   loadRecipe = () => {
@@ -129,9 +133,7 @@ class RecipeDetailScreen extends Component {
           data: responseJson,
         });
       })
-      .catch((error) => {
-        console.log('Error loading recipe ingredients', error);
-      });
+      .catch((error) => error);
 
     // Get analyzed instructions
     fetch(`https://api.spoonacular.com/recipes/${id}/analyzedInstructions?apiKey=${SPOONACULAR_API_KEY}`, {
@@ -145,24 +147,28 @@ class RecipeDetailScreen extends Component {
           instructions: responseJson,
         });
       })
-      .catch((error) => {
-        console.log('Error loading recipe instructions', error);
-      });
+      .catch((error) => error);
   }
 
   addToFavorites = () => {
     const { currentUser } = firebase.auth();
     const { data, favorite, instructions } = this.state;
+    const {
+      addRecipeToStorage,
+    } = this.props;
     this.setState((prevState) => ({
       favorite: !prevState.favorite,
     }));
     const path = firestore.collection('users').doc(currentUser.uid).collection('favorites');
     const id = data.id.toString();
+    const favObj = { ...data };
+    favObj.instructions = instructions;
+
     if (favorite === false) {
       // SAVE DATA IN FAVORITES
       // console.log('add2fav data',this.state.data);
       // console.log('add2fav instructions',this.state.instructions);
-
+      favObj.favorite = true;
       const docRef = path.doc(id);
       docRef.get().then((docSnapshot) => {
         if (docSnapshot.exists) {
@@ -172,18 +178,16 @@ class RecipeDetailScreen extends Component {
           }, { merge: true });
         } else {
           // Document does not exist yet
-          docRef.set({ ...data });
-          docRef.set({
-            favorite: true,
-            instructions,
-          }, { merge: true });
+          docRef.set({ ...favObj }, { merge: true });
         }
       });
+      addRecipeToStorage(favObj, true);
     } else {
       // REMOVE DATA FROM FAVORITES
       path.doc(id).update({
         favorite: false,
       });
+      changeFavoritedRecipe(id, false);
     }
   };
 
@@ -262,6 +266,7 @@ RecipeDetailScreen.navigationOptions = {
 };
 
 RecipeDetailScreen.propTypes = {
+  addRecipeToStorage: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
     getParam: PropTypes.func.isRequired,
@@ -273,4 +278,16 @@ RecipeDetailScreen.defaultProps = {
   navigation: undefined,
 };
 
-export default RecipeDetailScreen;
+const mapStateToProps = (state) => ({
+  recipes: state.RecipeStorage.recipes,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  addRecipeToStorage: (recipe, bool) => dispatch(addRecipeToStorage(recipe, bool)),
+  changeFavoritedRecipe: (id, bool) => dispatch(changeFavoritedRecipe(id, bool)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(RecipeDetailScreen);

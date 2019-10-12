@@ -2,7 +2,8 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import TabBarIcon from '../components/TabBarIcon';
 import SearchScreen from '../screens/SearchScreen';
@@ -16,7 +17,7 @@ const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
 });
-//
+
 const SearchStack = createStackNavigator(
   {
     Search: SearchScreen,
@@ -37,6 +38,7 @@ SearchStack.path = '';
 const CalendarStack = createStackNavigator(
   {
     Calendar: CalendarScreen,
+    Detail: RecipeDetailScreen,
   },
   config,
 );
@@ -103,7 +105,7 @@ const tabNavigator = createBottomTabNavigator({
   SearchStack,
   // HomeStack,
   // SettingsStack,
-  // CalendarStack,
+  CalendarStack,
   FavoritesStack,
   // ProfileStack,
 }, {

@@ -10,6 +10,7 @@ web-build/
 web-report/
 .env
 environment.js
-screens/*.json
+src/screens/*.json
 .eslintrc.json
 MealPlanner.code-workspace
+design-questions.txt

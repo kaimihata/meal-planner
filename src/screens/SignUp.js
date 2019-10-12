@@ -49,8 +49,8 @@ class SignUp extends Component {
       errorMessage,
       email,
       password,
-      navigation,
     } = this.state;
+    const { navigation } = this.props;
     return (
       <View>
         {errorMessage && (
@@ -78,7 +78,7 @@ class SignUp extends Component {
         </View>
         <Button title="Sign Up" onPress={this.handleSignUp} />
         <Button
-          title="Switch to Sign In"
+          title="Switch to Login"
           onPress={() => navigation.navigate('Login')}
         />
       </View>

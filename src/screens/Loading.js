@@ -12,7 +12,14 @@ class Loading extends Component {
   componentDidMount() {
     const { navigation } = this.props;
     firebase.auth().onAuthStateChanged((user) => {
-      navigation.navigate(user ? 'Main' : 'SignUp');
+      if (user) {
+        // Compare firebase favorites and redux favorites, upload any differences to firebase
+        // Don't look at non favorited recipes
+        navigation.navigate('Main');
+      } else {
+        navigation.navigate('SignUp');
+      }
+      // navigation.navigate(user ? 'Main' : 'SignUp');
     });
   }
 

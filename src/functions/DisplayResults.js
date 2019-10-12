@@ -4,11 +4,12 @@ import {
   Text,
   View,
 } from 'react-native';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Recipe from '../components/Recipe';
 import globalStyle from '../Style';
 
-export default class DisplayResults extends Component {
+class DisplayResults extends Component {
   createComponents = () => {
     const { number, data } = this.props;
     if (number === undefined || data === undefined) {
@@ -22,18 +23,20 @@ export default class DisplayResults extends Component {
     }
     const elements = [];
     for (let i = 0; i < number; i += 1) {
-      elements.push(
-        <Recipe
-          key={results[i].id}
-          id={results[i].id}
-          image={results[i].image}
-          imageUrls={results[i].imageUrls}
-          readyInMinutes={results[i].readyInMinutes}
-          servings={results[i].servings}
-          title={results[i].title}
-          navigation={navigation}
-        />,
-      );
+      if (results[i] !== undefined) {
+        elements.push(
+          <Recipe
+            key={results[i].id}
+            id={results[i].id}
+            image={results[i].image}
+            imageUrls={results[i].imageUrls}
+            readyInMinutes={results[i].readyInMinutes}
+            servings={results[i].servings}
+            title={results[i].title}
+            navigation={navigation}
+          />,
+        );
+      }
     }
     return (
       <View>{elements}</View>
@@ -67,3 +70,11 @@ DisplayResults.defaultProps = {
   number: undefined,
   style: undefined,
 };
+
+const mapStateToProps = (state) => ({
+  savedResults: state.recipes,
+});
+
+export default connect(
+  mapStateToProps,
+)(DisplayResults);

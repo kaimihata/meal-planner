@@ -3,11 +3,14 @@ import React, { Component } from 'react';
 import {
   View,
 } from 'react-native';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import {
+} from '../actions';
 import Recipe from '../components/Recipe';
 import firebase, { firestore } from '../firebase';
 
-export default class DisplayFavorites extends Component {
+class DisplayFavorites extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,3 +94,11 @@ DisplayFavorites.propTypes = {
 DisplayFavorites.defaultProps = {
   refresh: undefined,
 };
+
+const mapStateToProps = (state) => ({
+  savedRecipes: state.recipes,
+});
+
+export default connect(
+  mapStateToProps,
+)(DisplayFavorites);

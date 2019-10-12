@@ -58,17 +58,25 @@ class Recipe extends React.Component {
     };
   }
 
+  nav = () => {
+    const { navigation, onNav } = this.props;
+    const { navigate } = navigation;
+    if (onNav !== undefined) {
+      onNav();
+    }
+    navigate('Detail', { ...this.props });
+  }
+
   render() {
     const {
-      navigation, image, title, readyInMinutes, servings,
+      image, title, readyInMinutes, servings, extraComponent,
     } = this.props;
-    const { navigate } = navigation;
     let img = `https://spoonacular.com/recipeImages/${image}`;
     if (image.includes('http')) {
       img = image;
     }
     return (
-      <TouchableOpacity onPress={() => navigate('Detail', { ...this.props })}>
+      <TouchableOpacity onPress={() => this.nav()}>
         <View style={styles.outerContainer}>
           <View style={styles.imageView}>
             <Image source={{ url: img }} style={styles.image} />
@@ -76,6 +84,7 @@ class Recipe extends React.Component {
           <View style={styles.description}>
             <Text style={styles.title}>{title.split('–')[0]}</Text>
             <Text style={styles.subtitle}>{`${readyInMinutes} minutes, Serves ${servings}`}</Text>
+            {extraComponent !== undefined && extraComponent}
           </View>
         </View>
       </TouchableOpacity>
@@ -88,6 +97,8 @@ Recipe.propTypes = {
   title: PropTypes.string,
   readyInMinutes: PropTypes.number,
   servings: PropTypes.number,
+  onNav: PropTypes.func,
+  extraComponent: PropTypes.shape(),
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
     getParam: PropTypes.func.isRequired,
@@ -101,6 +112,8 @@ Recipe.defaultProps = {
   readyInMinutes: 0,
   servings: 0,
   navigation: undefined,
+  onNav: undefined,
+  extraComponent: undefined,
 };
 
 

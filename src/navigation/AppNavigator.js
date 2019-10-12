@@ -1,10 +1,12 @@
 /* eslint-disable react/jsx-filename-extension */
-import React from 'react';
-import { createAppContainer, createSwitchNavigator, createStackNavigator } from 'react-navigation';
+import React, { Component } from 'react';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import {
   Text,
 } from 'react-native';
-
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 import MainTabNavigator from './MainTabNavigator';
 import Loading from '../screens/Loading';
 import SignUp from '../screens/SignUp';
@@ -35,7 +37,7 @@ const AuthStack = createStackNavigator({
   },
 });
 
-export default createAppContainer(
+const AppContainer = createAppContainer(
   createSwitchNavigator({
     // You could add another route here for authentication.
     // Read more at https://reactnavigation.org/docs/en/auth-flow.html
@@ -44,3 +46,19 @@ export default createAppContainer(
   },
   { initialRouteName: 'Auth' }),
 );
+
+class AppNavigation extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return <AppContainer screenProps={this.props} />;
+  }
+}
+
+export default connect(
+  null,
+  actions,
+)(AppNavigation);
