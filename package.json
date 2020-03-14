@@ -19,7 +19,7 @@
     "@types/googlemaps": "^3.37.7",
     "@types/markerclustererplus": "^2.1.33",
     "@types/react": "^16.9.2",
-    "acorn": "^7.0.0",
+    "acorn": "^7.1.1",
     "braces": "^3.0.2",
     "expo": "^34.0.4",
     "expo-asset": "^6.0.0",
